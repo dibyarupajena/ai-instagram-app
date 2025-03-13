@@ -16,8 +16,19 @@ app.use(cors()); // Enables requests from frontend
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error('MongoDB Connection Error:', err));
+.then(async () => {
+  console.log('MongoDB Connected');
+  
+  // 🗑 Delete all old posts when the server starts
+  try {
+    await Post.deleteMany({});
+    console.log("🗑 All old posts deleted on server restart.");
+  } catch (error) {
+    console.error("Error deleting old posts:", error);
+  }
+})
+.catch(err => console.error('MongoDB Connection Error:', err));
+
 
 // OpenAI API setup
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -32,37 +43,40 @@ const Post = mongoose.model("Post", new mongoose.Schema({
   category: String
 }));
 
-// // API to generate AI-powered posts
-// app.post("/generate-post", async (req, res) => {
-//   try {
-//     const { category } = req.body;
-    
-//     // Call OpenAI API
-//     const response = await openai.chat.completions.create({
-//       model: "gpt-3.5-turbo",
-//       messages: [{ role: "user", content: `Generate an Instagram post about ${category}` }]
-//     });
+// #*0001*# Add a request limit per user using their IP address
+const userRequestCounts = new Map(); // Stores IP-based request counts
 
-//     const generatedText = response.choices[0].message.content;
-
-//     // Save to MongoDB
-//     const newPost = await Post.create({ text: generatedText, likes: 0, category });
-
-//     res.json(newPost);
-//   } catch (error) {
-//     console.error("Error generating post:", error);
-//     res.status(500).json({ error: "Failed to generate post" });
-//   }
-// });
+// Reset request limits every 24 hours
+setInterval(() => {
+  userRequestCounts.clear();
+  console.log("🔄 Request limits reset for all users.");
+}, 24 * 60 * 60 * 1000);
+// #*0001*#
 
 app.post("/generate-post", async (req, res) => {
   try {
     const { category } = req.body;
-    
+
+   // #*0001*# Enforce request limit
+    const userIp = req.ip; // Get the user's IP address
+
+    if (!userRequestCounts.has(userIp)) {
+      userRequestCounts.set(userIp, 0);
+    }
+
+    if (userRequestCounts.get(userIp) >= 10) {
+      return res.status(429).json({ error: "Request limit reached (10 per day)" });
+    }
+
+    userRequestCounts.set(userIp, userRequestCounts.get(userIp) + 1);
+    console.log(`📌 ${userIp} has made ${userRequestCounts.get(userIp)} requests today.`);
+    // #*0001*#
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Generate content using Gemini API
-    const result = await model.generateContent(`Write a short, engaging Instagram post about ${category}. It should sound natural, fit Instagram’s style, and include relevant hashtags.`);
+    const result = await model.generateContent(`Write a short, engaging 2-3 liner about ${category}. 
+      It should sound either educational(something novel) or inspiring or act like a quote, only of the following. 
+      Should be of 2-3 lines, within 20 words)`);
     const generatedText = result.response.text(); // Extract generated text
 
     // Save to MongoDB

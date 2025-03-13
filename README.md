@@ -40,8 +40,10 @@ npm install
 ### 4️⃣ Create a `.env` File
 Inside the `backend/` folder, create a `.env` file and add:
 ```
-MONGO_URI=your_mongodb_connection_string
+MONGODB_URII=your_mongodb_connection_string
 OPENAI_API_KEY=your_openai_api_key
+GEMINI_API_KEY=your_gemini_api_key
+
 ```
 
 ### 5️⃣ Start the Backend Server
