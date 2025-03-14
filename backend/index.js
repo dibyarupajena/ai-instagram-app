@@ -116,6 +116,9 @@ app.get("/posts", async (req, res) => {
   }
 });
 // #*0000*#
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
 
 
 // Start the server
