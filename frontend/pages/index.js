@@ -16,18 +16,32 @@ export default function Home() {
   }, [dispatch]);
 
   // #*0001*# Handle post generation and limit errors
+  // const handleGeneratePost = async () => {
+  //   try {
+  //     const response = await fetch("http://localhost:5000/generate-post", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ category: "technology" }),
+  //     });
+
+  //     if (response.status === 429) {
+  //       setError("Request limit reached (10 per day). Try again tomorrow.");
+  //     } else {
+  //       dispatch(fetchPosts()); // Refresh posts after generating
+  //       setError(null); // Clear error if successful
+  //     }
+  //   } catch (err) {
+  //     console.error("Error generating post:", err);
+  //     setError("Something went wrong. Please try again.");
+  //   }
+  // };
   const handleGeneratePost = async () => {
     try {
-      const response = await fetch("http://localhost:5000/generate-post", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category: "technology" }),
-      });
-
-      if (response.status === 429) {
+      const result = await dispatch(generatePost("technology")).unwrap(); // Dispatch Redux action
+  
+      if (result?.message === "Request limit reached") { // Check API response
         setError("Request limit reached (10 per day). Try again tomorrow.");
       } else {
-        dispatch(fetchPosts()); // Refresh posts after generating
         setError(null); // Clear error if successful
       }
     } catch (err) {
@@ -35,6 +49,23 @@ export default function Home() {
       setError("Something went wrong. Please try again.");
     }
   };
+
+  
+  // const handleGeneratePost = async () => {
+  //   try {
+  //     const result = await dispatch(generatePost("technology")).unwrap(); // Dispatch Redux action
+  
+  //     if (result.error) {
+  //       setError("Request limit reached (10 per day). Try again tomorrow.");
+  //     } else {
+  //       setError(null); // Clear error if successful
+  //     }
+  //   } catch (err) {
+  //     console.error("Error generating post:", err);
+  //     setError("Something went wrong. Please try again.");
+  //   }
+  // };
+  
   // #*0001*#
 
   return (

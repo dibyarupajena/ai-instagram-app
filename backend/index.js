@@ -90,10 +90,33 @@ app.post("/generate-post", async (req, res) => {
 });
 
 // API to fetch posts
+// #*0000*# Modify /posts route to support pagination
 app.get("/posts", async (req, res) => {
-  const posts = await Post.find();
-  res.json(posts);
+  try {
+    let { page = 1, limit = 10 } = req.query; // Get pagination parameters
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    const totalPosts = await Post.countDocuments(); // Get total number of posts
+    const posts = await Post.find()
+      .sort({ _id: -1 }) // Show latest posts first
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({
+      posts,
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page
+    });
+
+  } catch (error) {
+    console.error("Error fetching paginated posts:", error);
+    res.status(500).json({ error: "Failed to fetch posts" });
+  }
 });
+// #*0000*#
+
 
 // Start the server
 app.listen(5000, () => console.log("Server running on port 5000"));
