@@ -1,8 +1,5 @@
 {
   "dependencies": {
     "next": "^15.2.2"
-  },
-  "scripts": {
-  "vercel-build": "next build"
-}
+  }
 }
