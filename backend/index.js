@@ -50,8 +50,8 @@ const userRequestCounts = new Map(); // Stores IP-based request counts
 setInterval(() => {
   userRequestCounts.clear();
   console.log("🔄 Request limits reset for all users.");
-}, 24 * 60 * 60 * 1000);
-// #*0001*#
+}, 1 * 60 * 60 * 1000);
+// #*0001*# updates after 1 hour--24 * 60 * 60 * 1000
 
 app.post("/generate-post", async (req, res) => {
   try {
@@ -64,7 +64,7 @@ app.post("/generate-post", async (req, res) => {
       userRequestCounts.set(userIp, 0);
     }
 
-    if (userRequestCounts.get(userIp) >= 10) {
+    if (userRequestCounts.get(userIp) >= 100) {
       return res.status(429).json({ error: "Request limit reached (10 per day)" });
     }
 
@@ -75,9 +75,9 @@ app.post("/generate-post", async (req, res) => {
 
     // Generate content using Gemini API
     const result = await model.generateContent(`Write a short, engaging 2-3 liner about ${category}. 
-      It should sound either educational(something novel) or inspiring or act like a quote, only of the following. 
-      Should be of 2-3 lines, within 20 words)`);
-    const generatedText = result.response.text(); // Extract generated text
+      It should something cutting-edge educational. 
+      Should be of 2-3 lines, within 30 words)`);
+    const generatedText = result.response.text(); // Extract generated text-- (something novel) or inspiring or act like a quote, only of the following
 
     // Save to MongoDB
     const newPost = await Post.create({ text: generatedText, likes: 0, category });
