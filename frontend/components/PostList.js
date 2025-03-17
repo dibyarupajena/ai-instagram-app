@@ -55,27 +55,28 @@ const PostList = () => {
 
   return (
     <div>
-      <h2>AI-Powered Instagram</h2>
-      <button onClick={() => dispatch(generatePost("technology"))}>
-        Generate Tech Post
-      </button>
 
-      <div className="mt-6 space-y-4 w-full max-w-md">
+
+        <div className="mt-6 space-y-4 w-full max-w-md">
         {posts.length > 0 ? (
           posts.map((post, index) => (
             <div 
               key={post._id} 
-              className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
+              className="p-4 rounded-lg shadow-lg border border-gray-300 dark:border-gray-600 
+                          bg-gray-100 dark:bg-[#1f2937] bg-opacity-90 dark:bg-opacity-100 
+                          transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl"
               ref={index === posts.length - 1 ? lastPostRef : null} // Set ref on last post
             >
-              <p className="text-lg text-gray-800">{post.text}</p>
-              <span className="text-gray-600 text-sm">❤️ Likes: {post.likes}</span>
+              <p className="text-lg text-gray-900 dark:text-gray-100">{post.text}</p>
+              <span className="text-gray-600 dark:text-gray-400 text-sm">
+                ❤️ Likes: {post.likes}
+              </span>
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No posts yet...</p>
+          <p className="text-gray-500 dark:text-gray-400">No posts yet...</p>
         )}
-      </div>
+        </div>
 
 
     </div>

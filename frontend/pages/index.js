@@ -40,7 +40,7 @@ export default function Home() {
   // #*0001*#
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 pt-12">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center justify-center px-4 pt-12">
 
       <h1 className="text-3xl font-bold text-blue-500 mt-6"> AI-Powered Instagram</h1>
 

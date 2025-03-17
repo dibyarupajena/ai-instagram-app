@@ -21,6 +21,15 @@ body {
 }
 
 body {
+  @apply bg-gray-100; /* Uses Tailwind utility */
+}
+
+body {
+  padding-top: 20px; /* Adjust as needed */
+}
+
+
+body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
