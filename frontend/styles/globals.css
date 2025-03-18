@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;700&display=swap');
+
 
 :root {
   --background: #ffffff;
@@ -21,20 +23,21 @@ body {
 }
 
 body {
-  @apply bg-gray-100; /* Uses Tailwind utility */
-}
-
-body {
-  padding-top: 20px; /* Adjust as needed */
-}
-
-
-body {
+  padding-top: 20px; /* Ensures spacing from top */
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fun dark mode background with subtle emoji pattern */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0a0a0a;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Ctext x='5' y='20' font-size='20' fill='%23555555' opacity='0.3'%3E✨%3C/text%3E%3Ctext x='25' y='35' font-size='20' fill='%23555555' opacity='0.3'%3E🚀%3C/text%3E%3Ctext x='10' y='35' font-size='20' fill='%23555555' opacity='0.3'%3E🔥%3C/text%3E%3C/svg%3E");
+    background-size: 40px 40px;
+  }
 }
 
 * {
