@@ -2,11 +2,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"; 
 import axios from "axios"; // Axios for making API requests
 
-// // 🎯 Fetch posts from backend (GET request)
-// export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-//   const response = await axios.get("http://localhost:5000/posts"); // Replace with your backend URL
-//   return response.data; // Return fetched posts
-// });
 
 // 🎯 Generate AI-powered post (POST request)
 export const generatePost = createAsyncThunk("posts/generatePost", async (category) => {
@@ -26,7 +21,16 @@ const postSlice = createSlice({
   name: "posts",
   initialState: { items: [], status: "idle", error: null, currentPage: 1, totalPages: 1 }, // Added pagination state
 
-  reducers: {}, // No direct reducers since we're using async actions
+  reducers: {
+        ///***0000***////
+        likePost: (state, action) => {
+          const post = state.items.find((p) => p._id === action.payload); // Find post by ID
+          if (post) {
+            post.likes += 1; // Increment likes count
+          }
+        }
+        ///***0000***////
+  }, // No direct reducers since we're using async actions
 
   // Handle async actions inside extraReducers
   extraReducers: (builder) => {
@@ -56,8 +60,13 @@ const postSlice = createSlice({
       .addCase(generatePost.fulfilled, (state, action) => {
         state.items.unshift(action.payload); // Add new post at the top
       });
+
+      
   }
 });
+
+// Export the action
+export const { likePost } = postSlice.actions;
 
 // Export the reducer to be used in the store
 export default postSlice.reducer;
