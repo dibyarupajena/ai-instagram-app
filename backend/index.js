@@ -74,10 +74,14 @@ app.post("/generate-post", async (req, res) => {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Generate content using Gemini API
-    const result = await model.generateContent(`Write a short, engaging 2-3 liner about ${category}. 
-      It should something cutting-edge educational. 
-      Should be of 2-3 lines, within 30 words)`);
+    const result = await model.generateContent(`Write a short, uplifting 2-3 liner to inspire a peaceful and positive morning. It should promote mental well-being, self-care, or mindfulness. Keep it within 30 words.
+      `);
     const generatedText = result.response.text(); // Extract generated text-- (something novel) or inspiring or act like a quote, only of the following
+
+    // Write a short, engaging 2-3 liner about ${category}. 
+    //   It should something cutting-edge educational. 
+    //   Should be of 2-3 lines, within 30 words)
+
 
     // Save to MongoDB
     const newPost = await Post.create({ text: generatedText, likes: 0, category });

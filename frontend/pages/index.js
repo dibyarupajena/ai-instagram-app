@@ -23,7 +23,7 @@ export default function Home() {
 
   const handleGeneratePost = async () => {
     try {
-      const result = await dispatch(generatePost("technology")).unwrap(); // Dispatch Redux action
+      const result = await dispatch(generatePost("mental-health")).unwrap(); // Dispatch Redux action
   
       if (result?.message === "Request limit reached") { // Check API response
         setError("Request limit reached (10 per day). Try again tomorrow.");
@@ -88,7 +88,7 @@ export default function Home() {
   onClick={handleClick} 
   disabled={error !== null}
 >
-  <span className="relative z-10 font-extralight tracking-widest opacity-80" style={{ letterSpacing: "0.15em" }}>Generate Tech Post</span>
+  <span className="relative z-10 font-extralight tracking-widest opacity-80" style={{ letterSpacing: "0.15em" }}>Generate Post</span>
 
   {/* Shiny Reflection Overlay */}
   <div className="absolute inset-0 bg-white opacity-10 group-hover:opacity-20 transition-all duration-500"></div>

@@ -70,7 +70,7 @@ const PostList = () => {
                   <p className="text-lg text-gray-900 dark:text-gray-100">{post.text}</p>
                   <span className="text-gray-600 dark:text-gray-400 text-sm flex items-center gap-1">
                     <span 
-                      className="cursor-pointer text-lg transition-transform transform hover:scale-150 
+                      className="cursor-pointer text-lg transition-transform transform hover:scale-130 
                                 active:scale-110 animate-pulse"
                     >
                       ❤️
