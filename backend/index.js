@@ -55,9 +55,15 @@ setInterval(() => {
 
 app.post("/generate-post", async (req, res) => {
   try {
+    console.log("🛠 Full Request Body:", req.body); // ✅ Check if request body has category
     const { category } = req.body;
 
-   // #*0001*# Enforce request limit
+    if (!category) {
+      return res.status(400).json({ error: "Category is missing!" });
+    }
+    console.log("📌 Received category:", category);
+
+   // Enforce request limit---
     const userIp = req.ip; // Get the user's IP address
 
     if (!userRequestCounts.has(userIp)) {
@@ -70,21 +76,25 @@ app.post("/generate-post", async (req, res) => {
 
     userRequestCounts.set(userIp, userRequestCounts.get(userIp) + 1);
     console.log(`📌 ${userIp} has made ${userRequestCounts.get(userIp)} requests today.`);
-    // #*0001*#
+    // ---
+
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Generate content using Gemini API
-    const result = await model.generateContent(`Write a short, uplifting 2-3 liner to inspire a peaceful and positive morning. It should promote mental well-being, self-care, or mindfulness. Keep it within 30 words.
+    const result = await model.generateContent
+    (`Write a short, uplifting 2-3 liner about ${category}. It should promote mental well-being, self-care, or mindfulness. Keep it within 30 words.
       `);
+      
+    console.log("✅ AI Response Received:", result);
     const generatedText = result.response.text(); // Extract generated text-- (something novel) or inspiring or act like a quote, only of the following
 
-    // Write a short, engaging 2-3 liner about ${category}. 
-    //   It should something cutting-edge educational. 
-    //   Should be of 2-3 lines, within 30 words)
+    
+    console.log("📜 Generated Post:", generatedText);
 
 
     // Save to MongoDB
     const newPost = await Post.create({ text: generatedText, likes: 0, category });
+    console.log("✅ Post saved to MongoDB:", newPost);
 
     res.json(newPost);
   } catch (error) {

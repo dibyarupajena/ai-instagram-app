@@ -5,7 +5,10 @@ import axios from "axios"; // Axios for making API requests
 
 // 🎯 Generate AI-powered post (POST request)
 export const generatePost = createAsyncThunk("posts/generatePost", async (category) => {
+  console.log("📤 Sending category:", category);
+
   const response = await axios.post("https://ai-instagram-app.onrender.com/generate-post", { category }); 
+  // console.log(" Received response:", response.data);
   return response.data; // Return generated post
 });
 
@@ -30,7 +33,7 @@ const postSlice = createSlice({
           }
         }
         ///***0000***////
-  }, // No direct reducers since we're using async actions
+  }, 
 
   // Handle async actions inside extraReducers
   extraReducers: (builder) => {
