@@ -98,5 +98,6 @@ The frontend will start on **http://localhost:3000**.
 - Ensure MongoDB is running before starting the backend.
 - Use the correct `.env` keys.
 - The frontend fetches posts from the backend automatically.
+- need to awaken the mongo.db cluster which may sleep due to prolonged inactivity
 
 Happy Coding! 🚀
